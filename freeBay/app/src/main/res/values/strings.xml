@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">test</string>
+    <string name="app_name">freeBay</string>
+    <string name="cameraButton">Take a Picture</string>
+    <string name="chooseImg">Choose an Image</string>
+    <string name="uploadImg">Upload the Image</string>
+    <string name="itemImage">Image of Item</string>
 </resources>

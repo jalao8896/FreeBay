@@ -17,11 +17,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.EditText;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.google.firebase.database.*;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog pd;
     static final int PICK_IMAGE_REQUEST = 1;
     Uri filePath;
+    EditText editText;
+    Button submit;
+    DatabaseReference rootRef, demoRef;
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_z");
     String currentDateandTime = formatter.format(new Date());
@@ -51,6 +56,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        editText = (EditText) findViewById(R.id.etValue);
+        submit = (Button) findViewById(R.id.textBtn);
+
+        //database reference pointing to root of database
+        rootRef = FirebaseDatabase.getInstance().getReference();
+        //database reference pointing to demo node
+        demoRef = rootRef.child("demo");
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String value = editText.getText().toString();
+                //push creates a unique id in database
+                demoRef.push().setValue(value);
+            }
+        });
 
        takePic = findViewById(R.id.cameraButton);
 

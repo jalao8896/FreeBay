@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -61,4 +62,57 @@
 
     </RelativeLayout>
 
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <include
+            android:id="@+id/camera_activity"
+            layout="@layout/camera_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/chooseImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/chooseImg" />
+
+        <Button
+            android:id="@+id/uploadImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemImage"
+            android:layout_centerInParent="true"
+            android:text="@string/uploadImg" />
+
+        <ImageView
+            android:id="@+id/itemImage"
+            android:layout_width="225dp"
+            android:layout_height="225dp"
+            android:layout_below="@id/camera_activity"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/itemImage"
+            app:srcCompat="@drawable/common_google_signin_btn_icon_dark_focused" />
+
+        <Button
+            android:id="@+id/view_ad_button"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="view ads"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/uploadImg"/>
+
+    </RelativeLayout>
+>>>>>>> 96a330c... Added: Advertisement Class, RecyclerView Adapter Class, Cardview Items, Advertisement Activity triggered from edited main activity. Included: hard data for use in cardview.
 </ScrollView>

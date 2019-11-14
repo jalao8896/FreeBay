@@ -30,6 +30,15 @@
             android:layout_centerInParent="true"
             android:text="@string/uploadImg" />
 
+        <EditText
+            android:id="@+id/etValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contactInformation"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp" />
+
+
         <ImageView
             android:id="@+id/itemImage"
             android:layout_width="225dp"
@@ -77,6 +86,13 @@
             android:inputType="textMultiLine"
             android:hint="Contact Information" />
 
-
+        <Button
+            android:id="@+id/textBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="false"
+            android:layout_below="@id/contactInformation"
+            android:text="submit Text" />
     </RelativeLayout>
 </ScrollView>

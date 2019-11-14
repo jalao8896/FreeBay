@@ -2,11 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <include
             android:id="@+id/camera_activity"
@@ -38,6 +38,45 @@
             android:layout_centerInParent="true"
             android:contentDescription="@string/itemImage"
             app:srcCompat="@drawable/common_google_signin_btn_icon_dark_focused" />
+
+        <EditText
+            android:id="@+id/listingName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadImg"
+            android:layout_alignStart="@id/camera_activity"
+            android:layout_alignLeft="@id/uploadImg"
+            android:layout_alignRight="@id/uploadImg"
+            android:gravity="top|left"
+            android:hint="Listing Name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/listingDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listingName"
+            android:layout_alignStart="@id/camera_activity"
+            android:layout_alignEnd="@id/chooseImg"
+            android:layout_alignRight="@id/uploadImg"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="6"
+            android:hint="Listing Description"
+            android:scrollbars="vertical" />
+
+        <EditText
+            android:id="@+id/contactInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listingDescription"
+            android:layout_alignStart="@id/camera_activity"
+            android:layout_alignEnd="@id/chooseImg"
+            android:layout_alignRight="@id/uploadImg"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:hint="Contact Information" />
+
 
     </RelativeLayout>
 </ScrollView>

@@ -22,6 +22,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.example.test.MainActivity2;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,6 +42,20 @@ public class MainActivity extends AppCompatActivity {
     static final int PICK_IMAGE_REQUEST = 1;
     Uri filePath;
 
+
+
+    //AD ACTIVITY STUFF
+    //------------------------------------------------------------
+    private Button adButton;
+
+    public void openMainActivity2(){
+        Intent intent = new Intent(this, MainActivity2.class);
+        startActivity(intent);
+    }
+    //------------------------------------------------------------
+
+
+
     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_z");
     String currentDateandTime = formatter.format(new Date());
 
@@ -51,6 +66,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //SHOULD OPEN AD LISTING PAGE FROM MAIN ACTIVITY
+        //------------------------------------------------------------
+        adButton = (Button)findViewById(R.id.view_ad_button);
+
+        adButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMainActivity2();
+            }
+        });
+        //------------------------------------------------------------
 
        takePic = findViewById(R.id.cameraButton);
 

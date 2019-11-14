@@ -39,14 +39,5 @@
             android:contentDescription="@string/itemImage"
             app:srcCompat="@drawable/common_google_signin_btn_icon_dark_focused" />
 
-        <Button
-            android:id="@+id/view_ad_button"
-            android:layout_width="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="view ads"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/uploadImg"/>
-
     </RelativeLayout>
 </ScrollView>

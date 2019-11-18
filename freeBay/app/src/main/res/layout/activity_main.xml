@@ -30,6 +30,15 @@
             android:layout_centerInParent="true"
             android:text="@string/uploadImg" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/viewad_button"
+            android:layout_below="@+id/textBtn"
+            android:text="View Ads"
+            android:clickable="true"
+            android:focusable="true"/>
+
         <EditText
             android:id="@+id/etValue"
             android:layout_width="match_parent"

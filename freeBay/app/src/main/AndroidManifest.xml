@@ -15,6 +15,8 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="stateHidden">
 
+        <activity android:name=".MainActivity2"></activity>
+        <activity android:name=".Ad_Activity"></activity>
         <activity android:name=".MainActivity">
             <meta-data
                 android:name="com.google.firebase.ml.vision.DEPENDENCIES"

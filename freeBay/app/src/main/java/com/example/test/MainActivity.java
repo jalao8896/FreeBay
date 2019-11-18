@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     String pathToFile;
     Button chooseImg;
     Button uploadImg;
+    Button viewAds;
     ImageView imgView;
     ProgressDialog pd;
     static final int PICK_IMAGE_REQUEST = 1;
@@ -52,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://freebay-cbb54.appspot.com");
 
+    public void OpenMainActivity2(){
+        Intent intent = new Intent(this, MainActivity2.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +65,19 @@ public class MainActivity extends AppCompatActivity {
 
         editText = (EditText) findViewById(R.id.etValue);
         submit = (Button) findViewById(R.id.textBtn);
+        viewAds = (Button) findViewById(R.id.viewad_button);
+
+        viewAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OpenMainActivity2();
+            }
+        });
 
         //database reference pointing to root of database
-        rootRef = FirebaseDatabase.getInstance().getReference();
+        //rootRef = FirebaseDatabase.getInstance().getReference();
         //database reference pointing to demo node
-        demoRef = rootRef.child("demo");
+        //demoRef = rootRef.child("demo");
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override

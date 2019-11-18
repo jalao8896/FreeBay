@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,18 +15,23 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.EditText;
+import android.widget.Spinner;
+
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.google.firebase.database.*;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,93 +43,101 @@ public class MainActivity extends AppCompatActivity {
     Button takePic;
     String pathToFile;
     Button chooseImg;
-    Button uploadImg;
     Button viewAds;
     ImageView imgView;
     ProgressDialog pd;
-    static final int PICK_IMAGE_REQUEST = 1;
+    static final int PICK_IMAGE_REQUEST = 2;
     Uri filePath;
-    EditText editText;
+    EditText itemName;
+    Spinner condition;
+    EditText listingDescription;
+    EditText contactInformation;
+    String fileUrl;
     Button submit;
-    DatabaseReference rootRef, demoRef;
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_z");
-    String currentDateandTime = formatter.format(new Date());
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://freebay-cbb54.appspot.com");
-
-    public void OpenMainActivity2(){
-        Intent intent = new Intent(this, MainActivity2.class);
-        startActivity(intent);
-    }
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = database.getReference().child("Listings");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editText = (EditText) findViewById(R.id.etValue);
-        submit = (Button) findViewById(R.id.textBtn);
-        viewAds = (Button) findViewById(R.id.viewad_button);
-
-        viewAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                OpenMainActivity2();
-            }
-        });
-
-        //database reference pointing to root of database
-        //rootRef = FirebaseDatabase.getInstance().getReference();
-        //database reference pointing to demo node
-        //demoRef = rootRef.child("demo");
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String value = editText.getText().toString();
-                //push creates a unique id in database
-                demoRef.push().setValue(value);
-            }
-        });
-
-       takePic = findViewById(R.id.cameraButton);
+        takePic = findViewById(R.id.cameraButton);
+        chooseImg = findViewById(R.id.chooseImg);
+        imgView = findViewById(R.id.itemImage);
+        itemName = findViewById(R.id.listingName);
+        condition = findViewById(R.id.conditionArray);
+        listingDescription = findViewById(R.id.listingDescription);
+        contactInformation = findViewById(R.id.contactInformation);
+        submit = findViewById(R.id.submit);
+        viewAds = findViewById(R.id.viewad_button);
 
         if (Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         }
 
-        takePic.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                dispatchPictureTakerAction();
-            }
-        });
-
-        chooseImg = (Button) findViewById(R.id.chooseImg);
-        uploadImg = (Button) findViewById(R.id.uploadImg);
-        imgView = (ImageView) findViewById(R.id.itemImage);
-
-        pd = new ProgressDialog(this);
-        pd.setMessage("Uploading....");
-
-        chooseImg.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClickListener=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_PICK);
-                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+                if (v.equals(takePic)) {
+                    dispatchPictureTakerAction();
+                }
+                else if (v.equals(chooseImg)) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_PICK);
+                    startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+                }
+            }
+        };
+
+        itemName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
             }
         });
 
-        uploadImg.setOnClickListener(new View.OnClickListener() {
+        listingDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+        contactInformation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+        takePic.setOnClickListener(onClickListener);
+        chooseImg.setOnClickListener(onClickListener);
+
+        pd = new ProgressDialog(this);
+        pd.setMessage("Checking....");
+
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (filePath != null) {
                     pd.show();
 
-                    StorageReference childRef = storageRef.child("IMG_" + currentDateandTime + ".jpg");
+                    String currentTimestamp = formatter.format(new Date());
+
+                    final StorageReference childRef = storageRef.child("IMG_" + currentTimestamp + ".jpg");
 
                     //uploading the image
                     UploadTask uploadTask = childRef.putFile(filePath);
@@ -131,19 +145,51 @@ public class MainActivity extends AppCompatActivity {
                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // get the image Url of the file uploaded
+                            if (taskSnapshot.getMetadata() != null) {
+                                if (taskSnapshot.getMetadata().getReference() != null) {
+                                    Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                                    result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            String itemNameText = itemName.getText().toString();
+                                            String conditionText = condition.getSelectedItem().toString();
+                                            String itemDescriptionText = listingDescription.getText().toString();
+                                            String contactInformationText = contactInformation.getText().toString();
+
+                                            // getting image uri and converting into string
+                                            fileUrl = uri.toString();
+
+                                            listingObjects listing = new listingObjects(itemNameText, conditionText, itemDescriptionText, contactInformationText, fileUrl);
+
+                                            String currentTimestamp = formatter.format(new Date());
+                                            DatabaseReference listingsRef = databaseReference.child("Listing " + currentTimestamp);
+
+                                            listingsRef.setValue(listing);
+                                        }
+                                    });
+                                }
+                            }
                             pd.dismiss();
-                            Toast.makeText(MainActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Submission successful", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             pd.dismiss();
-                            Toast.makeText(MainActivity.this, "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Submission Failed -> " + e, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
                     Toast.makeText(MainActivity.this, "Select an image", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        viewAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OpenMainActivity2();
             }
         });
     }
@@ -175,17 +221,41 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void OpenMainActivity2(){
+        Intent intent = new Intent(this, MainActivity2.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        try {
-            //getting image from gallery
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+        if(requestCode == 1) {
+            try {
+                //getting image from in-app camera
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
 
-            //Setting image to ImageView
-            imgView.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
+                //Setting image to ImageView
+                imgView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(requestCode == 2) {
+            filePath = data.getData();
+            try {
+                //getting image from local storage
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+
+                //Setting image to ImageView
+                imgView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

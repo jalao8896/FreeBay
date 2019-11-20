@@ -17,9 +17,9 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.myViewHolder>{
 
     private Context myContext;
-    private List<Advertisement> myData;
+    private List<listingObjects> myData;
 
-    public RecyclerViewAdapter(Context myContext, List<Advertisement> myData) {
+    public RecyclerViewAdapter(Context myContext, List<listingObjects> myData) {
         this.myContext = myContext;
         this.myData = myData;
     }
@@ -35,8 +35,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, final int position) {
-        holder.ad_title_tv.setText(myData.get(position).getAd_Title());
-        holder.ad_thumbnail_img.setImageResource(myData.get(position).getThumbnail());
+        holder.ad_title_tv.setText(myData.get(position).getItemName());
+        //holder.ad_thumbnail_img.setImageResource(myData.get(position).getImg());
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,10 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(myContext, Ad_Activity.class);
 
                 //Passes data to the ad activity
-                intent.putExtra("Ad Title", myData.get(position).getAd_Title());
-                intent.putExtra("Category", myData.get(position).getCategory());
-                intent.putExtra("Ad Body", myData.get(position).getAd_Body());
-                intent.putExtra("Thumbnail", myData.get(position).getThumbnail());
+                intent.putExtra("Ad Title", myData.get(position).getItemName());
+                intent.putExtra("Condition", myData.get(position).getItemCondition());
+                intent.putExtra("Ad Body", myData.get(position).getItemDescription());
+                intent.putExtra("Thumbnail", myData.get(position).getImg());
 
                 //Begin the activity on click
                 myContext.startActivity(intent);

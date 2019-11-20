@@ -2,18 +2,20 @@ package com.example.test;
 
 
 public class Advertisement {
-
+    private String itemCondition;
+    private String contactInfo;
     private String Ad_Title;
-    private String Category;
     private String Ad_Body;
     private int Thumbnail;
+
 
     public Advertisement(){
     }
 
-    public Advertisement(String ad_Title, String ad_Category, String ad_Body, int thumbnail) {
+    public Advertisement(String ad_Title, String itemCondition, String ad_Body, int thumbnail) {
+
         Ad_Title = ad_Title;
-        Category = ad_Category;
+        itemCondition = itemCondition;
         Ad_Body = ad_Body;
         Thumbnail = thumbnail;
     }
@@ -22,8 +24,8 @@ public class Advertisement {
         return Ad_Title;
     }
 
-    public String getCategory() {
-        return Category;
+    public String getItemCondition() {
+        return itemCondition;
     }
 
     public String getAd_Body() {
@@ -38,8 +40,8 @@ public class Advertisement {
         Ad_Title = ad_Title;
     }
 
-    public void setCategory(String ad_Category) {
-        Category = ad_Category;
+    public void setCategory(String itemCondition) {
+        this.itemCondition = itemCondition;
     }
 
     public void setAd_Body(String ad_Body) {
@@ -48,5 +50,13 @@ public class Advertisement {
 
     public void setThumbnail(int thumbnail) {
         Thumbnail = thumbnail;
+    }
+
+    public String getContactInfo() {
+        return contactInfo;
+    }
+
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 }

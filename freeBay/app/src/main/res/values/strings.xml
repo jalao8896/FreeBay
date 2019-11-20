@@ -1,7 +1,22 @@
 <resources>
     <string name="app_name">freeBay</string>
-    <string name="cameraButton">Take a Picture</string>
-    <string name="chooseImg">Choose an Image</string>
-    <string name="uploadImg">Upload the Image</string>
-    <string name="itemImage">Image of Item</string>
+    <string name="cameraButton">Take a picture</string>
+    <string name="chooseImg">Choose an image</string>
+    <string name="uploadImg">Use this image</string>
+    <string name="itemImage">Image of item</string>
+    <string name="itemName">Enter the name of the item</string>
+    <string name="chooseConditionText">Choose the condition of the item:</string>
+    <string name="listingDescription">Enter a description of the item</string>
+    <string name="contactInformation">Enter your contact information</string>
+    <string name="submit">Submit</string>
+
+    <string-array name="conditionArray">
+        <item>New</item>
+        <item>Manufacturer refurbished</item>
+        <item>Seller refurbished</item>
+        <item>Used - Like New or Open Box</item>
+        <item>Used - Very Good</item>
+        <item>Used - Good</item>
+        <item>Used - Acceptable</item>
+    </string-array>
 </resources>

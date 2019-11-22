@@ -11,7 +11,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:menu="@menu/topbarmain">
+        app:menu="@menu/topbarmain" >
 
         <TextView
             android:id="@+id/appName"

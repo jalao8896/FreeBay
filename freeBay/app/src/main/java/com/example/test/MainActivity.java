@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.add_Listing:
+                    case R.id.addListing:
                         Intent intent = new Intent(MainActivity.this,AddListingActivity.class);
                         startActivity(intent);
                         break;

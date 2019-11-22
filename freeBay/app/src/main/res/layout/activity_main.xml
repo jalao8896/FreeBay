@@ -1,133 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
-        android:clickable="true"
-        android:focusable="true">
-
-        <include
-            android:id="@+id/camera_activity"
-            layout="@layout/camera_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:id="@+id/chooseImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="@string/chooseImg" />
-
-        <ImageView
-            android:id="@+id/itemImage"
-            android:layout_width="225dp"
-            android:layout_height="225dp"
-            android:layout_below="@id/camera_activity"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/itemImage"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark_focused" />
-
-        <EditText
-            android:id="@+id/listingName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/itemImage"
-            android:layout_centerInParent="true"
-            android:hint="@string/itemName"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName" />
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:menu="@menu/topbarmain">
 
         <TextView
-            android:id="@+id/chooseConditionText"
+            android:id="@+id/appName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/listingName"
-            android:text="@string/chooseConditionText"
-            android:textColor="#000000" />
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
-        <Spinner
-            android:id="@+id/conditionArray"
-            style="@style/Widget.AppCompat.Spinner.Underlined"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/chooseConditionText"
-            android:dropDownWidth="match_parent"
-            android:entries="@array/conditionArray"
-            android:spinnerMode="dialog" />
+    </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/listingDescriptionContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/conditionArray"
-            app:counterEnabled="true"
-            app:counterMaxLength="250">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:clipToPadding="false"
+        android:paddingBottom="55dp" />
 
-            <EditText
-                android:id="@+id/listingDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:fadeScrollbars="true"
-                android:gravity="top"
-                android:hint="@string/listingDescription"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:lines="5"
-                android:maxLength="250"
-                android:maxLines="10"
-                android:scrollbars="vertical" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:menu="@menu/bottomnavmain" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/contactInformationContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/listingDescriptionContainer"
-            app:counterEnabled="true"
-            app:counterMaxLength="250">
-
-            <EditText
-                android:id="@+id/contactInformation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:fadeScrollbars="true"
-                android:gravity="top"
-                android:hint="@string/contactInformation"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:lines="5"
-                android:maxLength="250"
-                android:maxLines="5"
-                android:scrollbars="vertical" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/contactInformationContainer"
-            android:layout_centerHorizontal="true"
-            android:text="@string/submit" />
-
-        <Button
-            android:id="@+id/viewad_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/submit"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="View Ads" />
-    </RelativeLayout>
-</ScrollView>
+</RelativeLayout>

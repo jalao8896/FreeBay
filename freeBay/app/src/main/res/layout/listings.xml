@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Ad_Activity">
+    tools:context=".listings">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -19,37 +19,42 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="375dp"
+                android:id="@+id/listingImage"
+                android:layout_width="380dp"
+                android:layout_height="380dp"
                 android:background="#ffffff"
-                android:id="@+id/adThumbnail"
-                android:scaleType="centerInside"/>
+                android:scaleType="centerInside" />
 
             <TextView
-                android:id="@+id/adTitle"
+                android:id="@+id/listingName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AD TITLE"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:text="@string/listingName"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/adCategory"
+                android:id="@+id/listingCondition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Category"
-                android:background="#edecec"
-                android:padding="8dp"
-                android:layout_marginTop="10dp"/>
+                android:text="@string/listingCondition"
+                android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/adDescription"
-                android:textSize="18sp"
+                android:id="@+id/listingDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="@string/listingDescription"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/listingContactInformation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Description"/>
+                android:text="@string/listingContactInformation"
+                android:textSize="18sp" />
 
         </LinearLayout>
 

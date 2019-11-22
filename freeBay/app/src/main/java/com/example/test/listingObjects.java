@@ -10,6 +10,18 @@ class listingObjects {
     private String contactInfo;
     private String img;
 
+    public listingObjects() {
+
+    }
+
+    public listingObjects(String itemNameText, String itemConditionText, String itemDescriptionText, String contactInfoText, String ImgFile) {
+        itemName = itemNameText;
+        itemCondition = itemConditionText;
+        itemDescription = itemDescriptionText;
+        contactInfo = contactInfoText;
+        img = ImgFile;
+    }
+
     public String getItemName() {
         return itemName;
     }
@@ -47,18 +59,6 @@ class listingObjects {
     }
 
     public void setImg(String ImgFile) {
-        img = ImgFile;
-    }
-
-    public listingObjects() {
-
-    }
-
-    public listingObjects(String itemNameText, String itemConditionText, String itemDescriptionText, String contactInfoText, String ImgFile) {
-        itemName = itemNameText;
-        itemCondition = itemConditionText;
-        itemDescription = itemDescriptionText;
-        contactInfo = contactInfoText;
         img = ImgFile;
     }
 }

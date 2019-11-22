@@ -1,12 +1,18 @@
 <resources>
     <string name="app_name">freeBay</string>
+    <string name="topBarMainSettings">settings</string>
+    <string name="listingName">Listing name</string>
+    <string name="listingCondition">Listing condition</string>
+    <string name="listingDescription">Listing description</string>
+    <string name="listingContactInformation">Listing contact information</string>
+    <string name="addListing">Add Listing</string>
     <string name="cameraButton">Take a picture</string>
     <string name="chooseImg">Choose an image</string>
     <string name="uploadImg">Use this image</string>
     <string name="itemImage">Image of item</string>
     <string name="itemName">Enter the name of the item</string>
     <string name="chooseConditionText">Choose the condition of the item:</string>
-    <string name="listingDescription">Enter a description of the item</string>
+    <string name="itemDescription">Enter a description of the item</string>
     <string name="contactInformation">Enter your contact information</string>
     <string name="submit">Submit</string>
 
@@ -18,5 +24,6 @@
         <item>Used - Very Good</item>
         <item>Used - Good</item>
         <item>Used - Acceptable</item>
+        <item>Broken / Defective</item>
     </string-array>
 </resources>

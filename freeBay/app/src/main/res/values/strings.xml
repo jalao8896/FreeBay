@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">freeBay</string>
-    <string name="topBarMainSettings">settings</string>
+
+    <string name="accountSettings">Account settings</string>
     <string name="listingName">Listing name</string>
     <string name="listingCondition">Listing condition</string>
     <string name="listingDescription">Listing description</string>
     <string name="listingContactInformation">Listing contact information</string>
     <string name="addListing">Add Listing</string>
+
     <string name="cameraButton">Take a picture</string>
     <string name="chooseImg">Choose an image</string>
     <string name="uploadImg">Use this image</string>

@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/settings"
-        android:title="@string/topBarMainSettings" />
+        android:id="@+id/accountSettings"
+        android:title="@string/accountSettings" />
 </menu>

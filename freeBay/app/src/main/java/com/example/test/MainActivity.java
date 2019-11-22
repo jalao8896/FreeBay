@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                listings.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     listingObjects listing = postSnapshot.getValue(listingObjects.class);
                     listings.add(listing);

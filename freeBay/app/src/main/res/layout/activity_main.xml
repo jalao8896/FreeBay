@@ -1,98 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolBarContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white">
 
-        <include
-            android:id="@+id/camera_activity"
-            layout="@layout/camera_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:id="@+id/chooseImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="@string/chooseImg" />
-
-        <Button
-            android:id="@+id/uploadImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/itemImage"
-            android:layout_centerInParent="true"
-            android:text="@string/uploadImg" />
-
-        <EditText
-            android:id="@+id/etValue"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/contactInformation"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/overflowMenuColor"
+            app:contentInsetStart="0dp"
+            app:menu="@menu/topbarmain">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/itemImage"
-            android:layout_width="225dp"
-            android:layout_height="225dp"
-            android:layout_below="@id/camera_activity"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/itemImage"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark_focused" />
+                <SearchView
+                    android:id="@+id/search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/sort"
+                    android:iconifiedByDefault="false"
+                    android:imeOptions="actionSearch"
+                    android:queryHint="Search by item name ..."
+                    android:theme="@style/searchViewTheme" />
 
-        <EditText
-            android:id="@+id/listingName"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/uploadImg"
-            android:layout_alignStart="@id/camera_activity"
-            android:layout_alignLeft="@id/uploadImg"
-            android:layout_alignRight="@id/uploadImg"
-            android:gravity="top|left"
-            android:hint="Listing Name"
-            android:inputType="textPersonName" />
+                <ImageButton
+                    android:id="@+id/sort"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:background="#00000000"
+                    app:srcCompat="@mipmap/sort" />
 
-        <EditText
-            android:id="@+id/listingDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/listingName"
-            android:layout_alignStart="@id/camera_activity"
-            android:layout_alignEnd="@id/chooseImg"
-            android:layout_alignRight="@id/uploadImg"
-            android:gravity="top|left"
-            android:inputType="textMultiLine"
-            android:lines="6"
-            android:hint="Listing Description"
-            android:scrollbars="vertical" />
+            </RelativeLayout>
 
-        <EditText
-            android:id="@+id/contactInformation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/listingDescription"
-            android:layout_alignStart="@id/camera_activity"
-            android:layout_alignEnd="@id/chooseImg"
-            android:layout_alignRight="@id/uploadImg"
-            android:gravity="top|left"
-            android:inputType="textMultiLine"
-            android:hint="Contact Information" />
+        </androidx.appcompat.widget.Toolbar>
 
-        <Button
-            android:id="@+id/textBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerHorizontal="false"
-            android:layout_below="@id/contactInformation"
-            android:text="submit Text" />
-    </RelativeLayout>
-</ScrollView>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomBar"
+        android:layout_below="@id/toolBarContainer" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:menu="@menu/bottomnavmain" />
+
+</RelativeLayout>

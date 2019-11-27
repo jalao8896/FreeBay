@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -58,6 +60,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 //Begin the activity on click
                 myContext.startActivity(intent);
 
+            }
+        });
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                String shareImage = myData.get(position).getImg();
+                String shareDescription = "Hey! I just saw a cool posting from Freebay of a %s that I thought you would like!\n";
+                share.putExtra(Intent.EXTRA_TEXT, String.format(shareDescription, myData.get(position).getItemName()));
+                share.putExtra(Intent.EXTRA_TEXT, shareImage);
+                myContext.startActivity(Intent.createChooser(share, "Share using"));
             }
         });
         holder.favorite.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +122,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Toolbar toolbar;
         ImageButton favorite;
         ImageButton removeFavorite;
+        ImageButton share;
 
         public myViewHolder(View itemView){
             super(itemView);
@@ -117,6 +133,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             toolbar = itemView.findViewById((R.id.buttonsContainer));
             favorite = itemView.findViewById(R.id.favoriteButton);
             removeFavorite = itemView.findViewById(R.id.removeFavoriteButton);
+            share = itemView.findViewById(R.id.shareButton);
         }
     }
 }

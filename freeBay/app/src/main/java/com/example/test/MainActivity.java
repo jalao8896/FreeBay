@@ -1,7 +1,5 @@
 package com.example.test;
 
-import androidx.annotation.NonNull;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +11,12 @@ import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = database.getReference().child("Listings");
 
     private List<listingObjects> listings;
+    private String filter;
+
+    private DataSnapshot mostRecent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                search(searchView.getQuery().toString(),listings);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                {
+                    myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
+                    recyclerView.setAdapter(myAdapter);
+                }
+                return false;
+            }
+        });
 
         sort.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -142,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mostRecent = dataSnapshot;
                 listings.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     listingObjects listing = postSnapshot.getValue(listingObjects.class);
@@ -149,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
-
                 recyclerView.setAdapter(myAdapter);
             }
 
@@ -160,13 +179,64 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /***
+     * Takes in a list of listing objects and a string checks if equals sets recyclerview based
+     * on temp list
+     */
+
+    public void search(String searcher, List<listingObjects> adlistings)
+    {
+        List<listingObjects> temp = new ArrayList<>();
+        if(adlistings.size()>0) {
+            int listingSize = adlistings.size();
+            for (int count = 0; count < adlistings.size(); count++) {
+                if(adlistings.get(count).getItemName().toLowerCase().contains(searcher.toLowerCase()))
+                {
+                    temp.add(adlistings.get(count));
+                }
+            }
+        }
+        myAdapter = new RecyclerViewAdapter(MainActivity.this, temp);
+        recyclerView.setAdapter(myAdapter);
+    }
+    //Insertion sort
+    public List<listingObjects> sort(String filter, List<listingObjects> adlistings)
+    {
+        if(adlistings.size()>0)
+        {
+            if (filter.equals("Name")) {
+                int listingSize = adlistings.size();
+                for(int count = 0; count<adlistings.size();count++)
+                {
+                    for(int counter = count + 1; counter<adlistings.size();counter++)
+                    {
+                        if(adlistings.get(count).getItemName().compareToIgnoreCase(adlistings.get(counter).getItemName())>0){
+                            listingObjects temp = adlistings.get(count);
+                            adlistings.set(count, adlistings.get(counter));
+                            adlistings.set(counter, temp);
+                        }
+                    }
+                }
+            }
+            else if(filter.equals("Date - Newest to Oldest"))
+            {
+                adlistings.clear();
+                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
+                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
+                    adlistings.add(listing);
+                }
+            }
+        }
+        return adlistings;
+    }
+
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void sortDialog() {
-        String[] sortByList = getResources().getStringArray(R.array.sortByArray);
+        final String[] sortByList = getResources().getStringArray(R.array.sortByArray);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -174,7 +244,10 @@ public class MainActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(sortByList, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                listings = sort(sortByList[i], listings);
                 dialogInterface.dismiss();
+                myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
+                recyclerView.setAdapter(myAdapter);
             }
         });
 
@@ -195,4 +268,5 @@ public class MainActivity extends AppCompatActivity {
             auth.removeAuthStateListener(authListener);
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.test;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +16,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.List;
+
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
@@ -27,6 +32,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+
+    private List<listingObjects> removeYesOrNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,24 +226,49 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 if (user != null) {
-                    user.delete()
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(AccountSettingsActivity.this, "Your profile is deleted:( Create a account now!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(AccountSettingsActivity.this, SignUpActivity.class));
-                                        finish();
-                                        progressBar.setVisibility(View.GONE);
-                                    } else {
-                                        Toast.makeText(AccountSettingsActivity.this, "Failed to delete your account!", Toast.LENGTH_SHORT).show();
-                                        progressBar.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
+                    final String[] removeAccountOptions = getResources().getStringArray(R.array.removeAccountAlert);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AccountSettingsActivity.this);
+                    builder.setTitle("Sort by");
+                    builder.setSingleChoiceItems(removeAccountOptions, -1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (removeAccountOptions[i] == "Yes"){
+                                user.delete()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(AccountSettingsActivity.this, "Your profile is deleted:( Create a account now!", Toast.LENGTH_SHORT).show();
+
+                                                    startActivity(new Intent(AccountSettingsActivity.this, SignUpActivity.class));
+
+
+                                                    finish();
+                                                    progressBar.setVisibility(View.GONE);
+                                                } else {
+                                                    Toast.makeText(AccountSettingsActivity.this, "Failed to delete your account!", Toast.LENGTH_SHORT).show();
+                                                    progressBar.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        });
+
+                            dialogInterface.dismiss();
+                        }
+                            else
+                                dialogInterface.dismiss();
+
+
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
                 }
             }
         });
+
+
 
 
         signOut.setOnClickListener(new View.OnClickListener() {
@@ -247,6 +279,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
         });
 
     }
+
+
+
+
+
+
 
     //sign out method
     public void signOut() {

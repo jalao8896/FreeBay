@@ -117,35 +117,61 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/contactInformationContainer"
+                android:id="@+id/emailInformationContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/itemDescriptionContainer"
                 app:counterEnabled="true"
-                app:counterMaxLength="250">
+                app:counterMaxLength="50">
 
                 <EditText
-                    android:id="@+id/contactInformation"
+                    android:id="@+id/emailInformation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:fadeScrollbars="true"
                     android:gravity="top"
-                    android:hint="@string/contactInformation"
+                    android:hint="enter your email address "
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine"
-                    android:lines="5"
-                    android:maxLength="250"
+                    android:lines="2"
+
                     android:maxLines="5"
                     android:scrollbars="vertical" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phoneNumberInformationContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emailInformationContainer"
+                app:counterEnabled="true"
+                app:counterMaxLength="50">
+
+                <EditText
+                    android:id="@+id/phoneNumberInformation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:fadeScrollbars="true"
+                    android:gravity="top"
+                    android:hint="enter your phone number here"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+
+                    android:maxLines="2"
+                    android:scrollbars="vertical" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
             <Button
                 android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/contactInformationContainer"
+                android:layout_below="@+id/phoneNumberInformationContainer"
                 android:layout_centerHorizontal="true"
                 android:text="@string/submit" />
 

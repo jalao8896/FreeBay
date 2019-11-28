@@ -9,7 +9,8 @@ class listingObjects {
     private String itemName;
     private String itemCondition;
     private String itemDescription;
-    private String contactInfo;
+    private String emailInfo;
+    private String phoneNumber;
     private String img;
     private favoriteObjects favorites;
 
@@ -17,12 +18,13 @@ class listingObjects {
 
     }
 
-    public listingObjects(String listingCreator, String itemName, String itemCondition, String itemDescription, String contactInfo, String img, favoriteObjects favorites) {
+    public listingObjects(String listingCreator, String itemName, String itemCondition, String itemDescription, String emailInfo, String phoneNumber ,String img, favoriteObjects favorites) {
         this.listingCreator = listingCreator;
         this.itemName = itemName;
         this.itemCondition = itemCondition;
         this.itemDescription = itemDescription;
-        this.contactInfo = contactInfo;
+        this.emailInfo = emailInfo;
+        this.phoneNumber = phoneNumber;
         this.img = img;
         this.favorites = favorites;
     }
@@ -47,9 +49,13 @@ class listingObjects {
 
     public void setItemDescription(String itemDescription) { this.itemDescription = itemDescription; }
 
-    public String getContactInfo() { return contactInfo; }
+    public String getEmailInfo() { return emailInfo; }
 
-    public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo; }
+    public void setEmailInfo(String emailInfo) { this.emailInfo = emailInfo; }
+
+    public String getPhoneNumberInfo() { return phoneNumber; }
+
+    public void setPhoneNumberInfo(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public String getImg() { return img; }
 

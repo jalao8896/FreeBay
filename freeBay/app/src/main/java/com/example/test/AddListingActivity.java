@@ -57,7 +57,8 @@ public class AddListingActivity extends AppCompatActivity {
     EditText itemName;
     Spinner condition;
     EditText itemDescription;
-    EditText contactInformation;
+    EditText emailInformation;
+    EditText phoneNumberInformation;
     String fileUrl;
     Button submit;
 
@@ -86,7 +87,8 @@ public class AddListingActivity extends AppCompatActivity {
         itemName = findViewById(R.id.itemName);
         condition = findViewById(R.id.conditionArray);
         itemDescription = findViewById(R.id.itemDescription);
-        contactInformation = findViewById(R.id.contactInformation);
+        emailInformation = findViewById(R.id.emailInformation);
+        phoneNumberInformation = findViewById(R.id.phoneNumberInformation);
         submit = findViewById(R.id.submit);
 
         if (Build.VERSION.SDK_INT >= 23) {
@@ -128,9 +130,20 @@ public class AddListingActivity extends AppCompatActivity {
             }
         });
 
-        contactInformation.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        contactInformation.setRawInputType(InputType.TYPE_CLASS_TEXT);
-        contactInformation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        emailInformation.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        emailInformation.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        emailInformation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+        phoneNumberInformation.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        phoneNumberInformation.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        phoneNumberInformation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
@@ -174,13 +187,14 @@ public class AddListingActivity extends AppCompatActivity {
                                             String itemNameText = itemName.getText().toString();
                                             String conditionText = condition.getSelectedItem().toString();
                                             String itemDescriptionText = itemDescription.getText().toString();
-                                            String contactInformationText = contactInformation.getText().toString();
+                                            String emailInformationText = emailInformation.getText().toString();
+                                            String phoneNumberInformationText = phoneNumberInformation.getText().toString();
 
                                             // getting image uri and converting into string
                                             fileUrl = uri.toString();
 
                                             favoriteObjects favorite = new favoriteObjects(userUid, false);
-                                            listingObjects listing = new listingObjects(userUid, itemNameText, conditionText, itemDescriptionText, contactInformationText, fileUrl, favorite);
+                                            listingObjects listing = new listingObjects(userUid, itemNameText, conditionText, itemDescriptionText, emailInformationText , phoneNumberInformationText ,fileUrl, favorite);
 
                                             DatabaseReference databaseReference = database.getReference().child("Listings");
                                             String uniqueListingKey = databaseReference.child("Listings").push().getKey();

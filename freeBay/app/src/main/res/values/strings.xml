@@ -28,6 +28,11 @@
         <item>Date - Newest to Oldest</item>
     </string-array>
 
+    <string-array name="removeAccountAlert">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
     <string name="accountSettings">Account settings</string>
     <string name="addFavorite">Add to favorites</string>
     <string name="removeFavorite">Remove favorites</string>

@@ -55,7 +55,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("Listing Name", myData.get(position).getItemName());
                 intent.putExtra("Listing Condition", myData.get(position).getItemCondition());
                 intent.putExtra("Listing Description", myData.get(position).getItemDescription());
-                intent.putExtra("Listing Contact Information", myData.get(position).getContactInfo());
+                intent.putExtra("Listing Email Address", myData.get(position).getEmailInfo());
+                intent.putExtra("Listing Phone Number", myData.get(position).getPhoneNumberInfo());
                 intent.putExtra("Listing Image", myData.get(position).getImg());
                 //Begin the activity on click
                 myContext.startActivity(intent);

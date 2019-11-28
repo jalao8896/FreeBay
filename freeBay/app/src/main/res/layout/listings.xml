@@ -49,10 +49,17 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/listingContactInformation"
+                android:id="@+id/listingEmailInformation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/listingContactInformation"
+                android:text="Listing Email Address"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/listingPhoneNumberInformation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Listing Phone Number"
                 android:textSize="18sp" />
 
         </LinearLayout>

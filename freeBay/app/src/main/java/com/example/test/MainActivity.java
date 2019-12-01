@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DataSnapshot mostRecent;
 
+    private int filterPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
                 listings.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     listingObjects listing = postSnapshot.getValue(listingObjects.class);
-                    listings.add(listing);
+                    listings.add(0, listing);
                 }
-
+                filterPosition = 0;
                 myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
                 recyclerView.setAdapter(myAdapter);
             }
@@ -204,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     {
         if(adlistings.size()>0)
         {
-            if (filter.equals("Name")) {
+            if (filter.equals("Name - Alphabetical")) {
                 int listingSize = adlistings.size();
                 for(int count = 0; count<adlistings.size();count++)
                 {
@@ -223,9 +225,17 @@ public class MainActivity extends AppCompatActivity {
                 adlistings.clear();
                 for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
                     listingObjects listing = postSnapshot.getValue(listingObjects.class);
+                    adlistings.add(0, listing);
+                }
+            }else if(filter.equals("Date - Oldest to Newest"))
+            {
+                adlistings.clear();
+                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
+                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
                     adlistings.add(listing);
                 }
             }
+
         }
         return adlistings;
     }
@@ -241,13 +251,21 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Sort by");
-        builder.setSingleChoiceItems(sortByList, -1, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(sortByList, filterPosition, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                listings = sort(sortByList[i], listings);
-                dialogInterface.dismiss();
-                myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
-                recyclerView.setAdapter(myAdapter);
+                if(i != filterPosition)
+                {
+                    listings = sort(sortByList[i], listings);
+                    filterPosition = i;
+                    dialogInterface.dismiss();
+                    myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
+                    recyclerView.setAdapter(myAdapter);
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this,"Please select a different option", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

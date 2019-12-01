@@ -3,7 +3,7 @@
 
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="signUp">SignUp</string>
+    <string name="signUp">Sign Up</string>
     <string name="forgotPassword">Forgot password?</string>
     <string name="signIn">Go to login</string>
     <string name="login">Login</string>
@@ -21,11 +21,12 @@
     <string name="send">Send</string>
     <string name="removeUser">Remove account</string>
     <string name="sendPasswordResetEmail">Send a password reset email</string>
-    <string name="signOut">SignOut</string>
+    <string name="signOut">Sign Out</string>
 
     <string-array name="sortByArray">
-        <item>Name</item>
         <item>Date - Newest to Oldest</item>
+        <item>Date - Oldest to Newest</item>
+        <item>Name - Alphabetical</item>
     </string-array>
 
     <string-array name="removeAccountAlert">

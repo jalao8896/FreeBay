@@ -2,6 +2,10 @@ package com.example.test;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -81,9 +87,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             DatabaseReference favoriteRef = listingRef.child("favorites").child("isFavorite");
             @Override
             public void onClick(View v) {
+                //Toast.makeText(myContext,""+favoriteRef.,Toast.LENGTH_SHORT).show();
+                //holder.favorite.setImageDrawable();
                 favoriteRef.setValue(true);
             }
         });
+
         holder.removeFavorite.setOnClickListener(new View.OnClickListener() {
             DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference().child("Listings").child(myData.get(position).getListingNum());
             DatabaseReference favoriteRef = listingRef.child("favorites").child("isFavorite");
@@ -100,14 +109,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 switch (item.getItemId()) {
                     case R.id.addFavorite:
                         favoriteRef.setValue(true);
+                        changeColor(item.getIcon(),true);
                         break;
                     case R.id.removeFavorite:
                         favoriteRef.setValue(false);
+                        changeColor(item.getIcon(),false);
                         break;
                 }
                 return false;
             }
         });
+    }
+    public void changeColor(Drawable drawer, boolean fav)
+    {
+        Toast.makeText(myContext,"COLOR CHANGE",Toast.LENGTH_SHORT).show();
+        if (drawer != null) {
+            if(fav)
+            {
+                drawer.setColorFilter(
+                        new PorterDuffColorFilter(ContextCompat.getColor(myContext,R.color.red), PorterDuff.Mode.SRC_IN));
+            }
+
+            else
+            {
+                drawer.setColorFilter(null);
+            }
+        }
     }
 
     @Override

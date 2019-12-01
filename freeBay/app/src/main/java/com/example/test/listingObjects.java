@@ -3,7 +3,7 @@ package com.example.test;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-class listingObjects {
+public class listingObjects {
     private String listingCreator;
     private String listingNum;
     private String itemName;
@@ -14,7 +14,8 @@ class listingObjects {
     private String img;
     private favoriteObjects favorites;
 
-    public listingObjects() {
+    public listingObjects()
+    {
 
     }
 

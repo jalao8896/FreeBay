@@ -76,9 +76,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 String shareImage = myData.get(position).getImg();
-                String shareDescription = "Hey! I just saw a cool posting from Freebay of a %s that I thought you would like!\n";
+                String shareDescription = shareImage + "\n\n" + "Hey! I just saw a cool posting from Freebay of a %s that I thought you would like!";
                 share.putExtra(Intent.EXTRA_TEXT, String.format(shareDescription, myData.get(position).getItemName()));
-                share.putExtra(Intent.EXTRA_TEXT, shareImage);
                 myContext.startActivity(Intent.createChooser(share, "Share using"));
             }
         });

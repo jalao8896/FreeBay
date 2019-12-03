@@ -106,7 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void addUserTodatabase(String email, String password){
 
-        User user = new User();
+        UserAccount user = new UserAccount();
 
         user.setEmail(email);
         user.setPassword(password);

@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter myAdapter;
-    private Toolbar toolbar;
     private SearchView searchView;
     private ImageButton sort;
     private BottomNavigationView bottomNavView;
@@ -51,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = database.getReference().child("Listings");
 
     private List<listingObjects> listings;
-    private String filter;
 
     private DataSnapshot mostRecent;
 
@@ -62,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.topBar);
         searchView = findViewById(R.id.search);
         sort = findViewById(R.id.sort);
         bottomNavView = findViewById(R.id.bottomBar);
@@ -82,19 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.accountSettings:
-                        Intent intent = new Intent(MainActivity.this,AccountSettingsActivity.class);
-                        startActivity(intent);
-                        break;
-                }
-                return false;
-            }
-        });
 
         searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -132,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        bottomNavView.getMenu().getItem(0).setIcon(R.mipmap.home_filled);
         bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -147,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.favorite:
                         Intent favoriteIntent = new Intent(MainActivity.this,FavoritesActivity.class);
                         startActivity(favoriteIntent);
+                        break;
+                    case R.id.accountSettings:
+                        Intent accountSettingsIntent = new Intent(MainActivity.this,AccountSettingsActivity.class);
+                        startActivity(accountSettingsIntent);
                         break;
                 }
                 return false;

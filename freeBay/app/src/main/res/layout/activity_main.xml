@@ -17,8 +17,7 @@
             android:layout_height="match_parent"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/overflowMenuColor"
-            app:contentInsetStart="0dp"
-            app:menu="@menu/topbarmain">
+            app:contentInsetStart="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -68,6 +67,7 @@
         android:background="@color/white"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottomnavmain" />
 
 </RelativeLayout>

@@ -26,7 +26,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/accountSettings" />
+                    android:text="@string/accountSettings"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
@@ -146,6 +149,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/removeUser"
+        android:layout_marginTop="10dp"
         android:text="@string/changeEmail"
         android:textColor="@color/black"
         android:textStyle="bold"

@@ -34,18 +34,22 @@
         <item>No</item>
     </string-array>
 
-    <string name="accountSettings">Account settings</string>
     <string name="addFavorite">Add to favorites</string>
     <string name="removeFavorite">Remove favorites</string>
     <string name="shareListing">Share listing</string>
     <string name="reportListing">Report listing</string>
+    <string name="listingLikeCounter">Likes: </string>
+    <string name="listingLikes">Listing likes</string>
     <string name="listingName">Listing name</string>
     <string name="listingCondition">Listing condition</string>
     <string name="listingDescription">Listing description</string>
-    <string name="listingContactInformation">Listing contact information</string>
+    <string name="listingEmail">Listing email</string>
+    <string name="listingPhone">Listing phone</string>
+    <string name="home">Home</string>
     <string name="myListings">My Listings</string>
     <string name="addListing">Add Listing</string>
     <string name="favorites">Favorites</string>
+    <string name="accountSettings">Account</string>
 
     <string name="cameraButton">Take a picture</string>
     <string name="chooseImg">Choose an image</string>
@@ -65,7 +69,8 @@
         <item>Broken / Defective</item>
     </string-array>
 
-    <string name="itemDescription">Enter a description of the item</string>
-    <string name="contactInformation">Enter your contact information</string>
+    <string name="itemDescription">Enter a description of the item (optional)</string>
+    <string name="emailInformation">Enter your email address</string>
+    <string name="phoneInformation">Enter your phone number (optional)</string>
     <string name="submit">Submit</string>
 </resources>

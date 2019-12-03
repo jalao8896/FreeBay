@@ -21,8 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MyListingsActivity" />
-        <activity android:name=".FavoritesActivity" />
+        <activity android:name=".MyListingsActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name=".FavoritesActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".PasswordResetActivity" />

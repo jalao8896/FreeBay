@@ -1,11 +1,11 @@
 package com.example.test;
 
-public class User {
+public class UserAccount {
 
     String email;
     String password;
 
-    public User() {
+    public UserAccount() {
 
     }
 

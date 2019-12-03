@@ -1,7 +1,6 @@
 package com.example.test;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
+import java.util.HashMap;
 
 public class listingObjects {
     private String listingCreator;
@@ -12,14 +11,16 @@ public class listingObjects {
     private String emailInfo;
     private String phoneNumber;
     private String img;
-    private favoriteObjects favorites;
+    private HashMap<String, favoriteObjects> favorites;
+    private HashMap<String, likeObjects> likes;
+    private int likeCount;
 
     public listingObjects()
     {
 
     }
 
-    public listingObjects(String listingCreator, String itemName, String itemCondition, String itemDescription, String emailInfo, String phoneNumber ,String img, favoriteObjects favorites) {
+    public listingObjects(String listingCreator, String itemName, String itemCondition, String itemDescription, String emailInfo, String phoneNumber ,String img, HashMap<String, favoriteObjects> favorites, HashMap<String, likeObjects> likes, int likeCount) {
         this.listingCreator = listingCreator;
         this.itemName = itemName;
         this.itemCondition = itemCondition;
@@ -28,6 +29,8 @@ public class listingObjects {
         this.phoneNumber = phoneNumber;
         this.img = img;
         this.favorites = favorites;
+        this.likes = likes;
+        this.likeCount = likeCount;
     }
 
     public String getListingCreator() { return listingCreator; }
@@ -36,7 +39,7 @@ public class listingObjects {
 
     public String getListingNum() { return listingNum; }
 
-    public void setLlistingNum(String listingNum) { this.listingNum = listingNum; }
+    public void setListingNum(String listingNum) { this.listingNum = listingNum; }
 
     public String getItemName() { return itemName; }
 
@@ -62,8 +65,15 @@ public class listingObjects {
 
     public void setImg(String img) { this.img = img; }
 
-    public favoriteObjects getFavorites() { return favorites; }
+    public HashMap<String, favoriteObjects> getFavorites() { return favorites; }
 
-    public void setFavorites(favoriteObjects favorites) { this.favorites = favorites; }
+    public void setFavorites(HashMap<String, favoriteObjects> favorites) { this.favorites = favorites; }
 
+    public HashMap<String, likeObjects> getLikes() { return likes; }
+
+    public void setLikes(HashMap<String, likeObjects> likes) { this.likes = likes; }
+
+    public int getLikeCount() { return likeCount; }
+
+    public void setLikeCount(int likeCount) { this.likeCount = likeCount; }
 }

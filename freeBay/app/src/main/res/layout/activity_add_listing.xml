@@ -15,7 +15,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:contentInsetStart="0dp" />
+            app:contentInsetStart="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/activityTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/addListing"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -120,9 +138,7 @@
                 android:id="@+id/emailInformationContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/itemDescriptionContainer"
-                app:counterEnabled="true"
-                app:counterMaxLength="50">
+                android:layout_below="@+id/itemDescriptionContainer">
 
                 <EditText
                     android:id="@+id/emailInformation"
@@ -131,13 +147,11 @@
                     android:ems="10"
                     android:fadeScrollbars="true"
                     android:gravity="top"
-                    android:hint="enter your email address "
+                    android:hint="@string/emailInformation"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine"
-                    android:lines="2"
 
-                    android:maxLines="5"
-                    android:scrollbars="vertical" />
+                    android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,9 +159,7 @@
                 android:id="@+id/phoneNumberInformationContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/emailInformationContainer"
-                app:counterEnabled="true"
-                app:counterMaxLength="50">
+                android:layout_below="@+id/emailInformationContainer">
 
                 <EditText
                     android:id="@+id/phoneNumberInformation"
@@ -156,13 +168,10 @@
                     android:ems="10"
                     android:fadeScrollbars="true"
                     android:gravity="top"
-                    android:hint="enter your phone number here"
+                    android:hint="@string/phoneInformation"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine"
-                    android:lines="2"
-
-                    android:maxLines="2"
-                    android:scrollbars="vertical" />
+                    android:inputType="number|phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,7 +180,7 @@
                 android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/phoneNumberInformationContainer"
+                android:layout_below="@id/phoneNumberInformationContainer"
                 android:layout_centerHorizontal="true"
                 android:text="@string/submit" />
 

@@ -20,9 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.List;
-
-
 public class AccountSettingsActivity extends AppCompatActivity {
 
     private Button btnChangeEmail, btnChangePassword, btnSendResetEmail, btnRemoveUser,
@@ -32,8 +29,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
-
-    private List<listingObjects> removeYesOrNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +42,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+
+        toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -226,40 +228,28 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 if (user != null) {
-                    final String[] removeAccountOptions = getResources().getStringArray(R.array.removeAccountAlert);
                     AlertDialog.Builder builder = new AlertDialog.Builder(AccountSettingsActivity.this);
-                    builder.setTitle("Sort by");
-                    builder.setSingleChoiceItems(removeAccountOptions, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (removeAccountOptions[i] == "Yes"){
-                                user.delete()
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(AccountSettingsActivity.this, "Your profile is deleted:( Create a account now!", Toast.LENGTH_SHORT).show();
+                    builder.setTitle("Delete account");
+                    builder.setMessage("Are you sure you want to delete your account?");
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                                                    startActivity(new Intent(AccountSettingsActivity.this, SignUpActivity.class));
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            user.delete();
+                            Toast.makeText(AccountSettingsActivity.this, "Success: account has been deleted", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AccountSettingsActivity.this, SignUpActivity.class));
+                            finish();
+                            progressBar.setVisibility(View.GONE);
 
+                            dialog.dismiss();
+                        }})
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 
-                                                    finish();
-                                                    progressBar.setVisibility(View.GONE);
-                                                } else {
-                                                    Toast.makeText(AccountSettingsActivity.this, "Failed to delete your account!", Toast.LENGTH_SHORT).show();
-                                                    progressBar.setVisibility(View.GONE);
-                                                }
-                                            }
-                                        });
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    Toast.makeText(AccountSettingsActivity.this, "Failure: unable to delete account", Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
 
-                            dialogInterface.dismiss();
-                        }
-                            else
-                                dialogInterface.dismiss();
-
-
-                        }
-                    });
+                                    dialog.dismiss();
+                                }});
 
                     AlertDialog dialog = builder.create();
                     dialog.show();

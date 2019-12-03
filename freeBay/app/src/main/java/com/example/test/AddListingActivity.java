@@ -30,7 +30,10 @@ import android.widget.Spinner;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -193,14 +196,20 @@ public class AddListingActivity extends AppCompatActivity {
                                             // getting image uri and converting into string
                                             fileUrl = uri.toString();
 
-                                            favoriteObjects favorite = new favoriteObjects(userUid, false);
-                                            listingObjects listing = new listingObjects(userUid, itemNameText, conditionText, itemDescriptionText, emailInformationText , phoneNumberInformationText ,fileUrl, favorite);
+                                            HashMap<String, favoriteObjects> favorites = new HashMap<>();
+                                            favoriteObjects favorite = new favoriteObjects(false);
+                                            favorites.put(userUid, favorite);
+                                            HashMap<String, likeObjects> likes = new HashMap<>();
+                                            likeObjects like = new likeObjects(false);
+                                            likes.put(userUid, like);
+                                            int likeCount = 0;
+                                            listingObjects listing = new listingObjects(userUid, itemNameText, conditionText, itemDescriptionText, emailInformationText, phoneNumberInformationText, fileUrl, favorites, likes, likeCount);
 
                                             DatabaseReference databaseReference = database.getReference().child("Listings");
                                             String uniqueListingKey = databaseReference.child("Listings").push().getKey();
                                             DatabaseReference listingsRef = databaseReference.child(uniqueListingKey);
 
-                                            listing.setLlistingNum(uniqueListingKey);
+                                            listing.setListingNum(uniqueListingKey);
 
                                             listingsRef.setValue(listing);
                                         }

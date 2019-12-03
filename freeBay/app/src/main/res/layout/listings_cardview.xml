@@ -43,8 +43,7 @@
             android:background="@color/white"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:contentInsetStart="0dp"
-            app:menu="@menu/card_buttons">
+            app:contentInsetStart="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -61,27 +60,26 @@
                     android:src="@mipmap/heart_outline" />
 
                 <ImageButton
-                    android:id="@+id/removeFavoriteButton"
+                    android:id="@+id/shareButton"
                     android:layout_width="45dp"
                     android:layout_height="match_parent"
                     android:layout_toEndOf="@id/favoriteButton"
                     android:background="#00000000"
-                    app:srcCompat="@mipmap/broken_heart" />
+                    app:srcCompat="@mipmap/share_outline" />
 
                 <ImageButton
-                    android:id="@+id/shareButton"
+                    android:id="@+id/thumbUpDown"
                     android:layout_width="45dp"
                     android:layout_height="match_parent"
-                    android:layout_toEndOf="@id/removeFavoriteButton"
+                    android:layout_toStartOf="@id/reportButton"
                     android:background="#00000000"
-                    app:srcCompat="@mipmap/share_outline" />
+                    app:srcCompat="@mipmap/thumb_up_down_outline" />
 
                 <ImageButton
                     android:id="@+id/reportButton"
                     android:layout_width="45dp"
                     android:layout_height="match_parent"
-                    android:layout_alignParentEnd="false"
-                    android:layout_toEndOf="@id/shareButton"
+                    android:layout_alignParentEnd="true"
                     android:background="#00000000"
                     app:srcCompat="@mipmap/report_outline" />
 

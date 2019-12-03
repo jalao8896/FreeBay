@@ -1,102 +1,84 @@
 package com.example.test;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-
-import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.Toast;
-import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    Button takePic;
-    String pathToFile;
-    Button chooseImg;
-    Button viewAds;
-    ImageView imgView;
-    ProgressDialog pd;
-    static final int PICK_IMAGE_REQUEST = 2;
-    Uri filePath;
-    EditText itemName;
-    Spinner condition;
-    EditText listingDescription;
-    EditText contactInformation;
-    String fileUrl;
-    Button submit;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter myAdapter;
+    private SearchView searchView;
+    private ImageButton sort;
+    private BottomNavigationView bottomNavView;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_z");
+    private FirebaseAuth.AuthStateListener authListener;
+    private FirebaseAuth auth;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReferenceFromUrl("gs://freebay-cbb54.appspot.com");
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = database.getReference().child("Listings");
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReferenceFromUrl("gs://freebay-cbb54.appspot.com");
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference databaseReference = database.getReference().child("Listings");
+    private List<listingObjects> listings;
+
+    private DataSnapshot mostRecent;
+
+    private int filterPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        takePic = findViewById(R.id.cameraButton);
-        chooseImg = findViewById(R.id.chooseImg);
-        imgView = findViewById(R.id.itemImage);
-        itemName = findViewById(R.id.listingName);
-        condition = findViewById(R.id.conditionArray);
-        listingDescription = findViewById(R.id.listingDescription);
-        contactInformation = findViewById(R.id.contactInformation);
-        submit = findViewById(R.id.submit);
-        viewAds = findViewById(R.id.viewad_button);
+        searchView = findViewById(R.id.search);
+        sort = findViewById(R.id.sort);
+        bottomNavView = findViewById(R.id.bottomBar);
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
-        }
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
 
-        View.OnClickListener onClickListener=new View.OnClickListener() {
+        authListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onClick(View v) {
-                if (v.equals(takePic)) {
-                    dispatchPictureTakerAction();
-                }
-                else if (v.equals(chooseImg)) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_PICK);
-                    startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    // user auth state is changed - user is null
+                    // launch login activity
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         };
 
-        itemName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
@@ -104,121 +86,184 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        listingDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
+            public boolean onQueryTextSubmit(String query) {
+                search(searchView.getQuery().toString(),listings);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                {
+                    myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
+                    recyclerView.setAdapter(myAdapter);
                 }
+                return false;
             }
         });
 
-        contactInformation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
-            }
-        });
-
-        takePic.setOnClickListener(onClickListener);
-        chooseImg.setOnClickListener(onClickListener);
-
-        pd = new ProgressDialog(this);
-        pd.setMessage("Checking....");
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
+        sort.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (filePath != null) {
-                    pd.show();
-
-                    String currentTimestamp = formatter.format(new Date());
-
-                    final StorageReference childRef = storageRef.child("IMG_" + currentTimestamp + ".jpg");
-
-                    //uploading the image
-                    UploadTask uploadTask = childRef.putFile(filePath);
-
-                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // get the image Url of the file uploaded
-                            if (taskSnapshot.getMetadata() != null) {
-                                if (taskSnapshot.getMetadata().getReference() != null) {
-                                    Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
-                                    result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            String itemNameText = itemName.getText().toString();
-                                            String conditionText = condition.getSelectedItem().toString();
-                                            String itemDescriptionText = listingDescription.getText().toString();
-                                            String contactInformationText = contactInformation.getText().toString();
-
-                                            // getting image uri and converting into string
-                                            fileUrl = uri.toString();
-
-                                            listingObjects listing = new listingObjects(itemNameText, conditionText, itemDescriptionText, contactInformationText, fileUrl);
-
-                                            String currentTimestamp = formatter.format(new Date());
-                                            DatabaseReference listingsRef = databaseReference.child("Listing " + currentTimestamp);
-
-                                            listingsRef.setValue(listing);
-                                        }
-                                    });
-                                }
-                            }
-                            pd.dismiss();
-                            Toast.makeText(MainActivity.this, "Submission successful", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            pd.dismiss();
-                            Toast.makeText(MainActivity.this, "Submission Failed -> " + e, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(MainActivity.this, "Select an image", Toast.LENGTH_SHORT).show();
+                switch (v.getId()){
+                    case R.id.sort:
+                        sortDialog();
+                        break;
                 }
             }
         });
 
-        viewAds.setOnClickListener(new View.OnClickListener() {
+        bottomNavView.getMenu().getItem(0).setIcon(R.mipmap.home_filled);
+        bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                OpenMainActivity2();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.myListings:
+                        Intent myListingIntent = new Intent(MainActivity.this,MyListingsActivity.class);
+                        startActivity(myListingIntent);
+                        break;
+                    case R.id.addListing:
+                        Intent addListingIntent = new Intent(MainActivity.this,AddListingActivity.class);
+                        startActivity(addListingIntent);
+                        break;
+                    case R.id.favorite:
+                        Intent favoriteIntent = new Intent(MainActivity.this,FavoritesActivity.class);
+                        startActivity(favoriteIntent);
+                        break;
+                    case R.id.accountSettings:
+                        Intent accountSettingsIntent = new Intent(MainActivity.this,AccountSettingsActivity.class);
+                        startActivity(accountSettingsIntent);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        listings = new ArrayList<>();
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mostRecent = dataSnapshot;
+                listings.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
+                    listings.add(0, listing);
+                }
+                filterPosition = 0;
+                myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
+                recyclerView.setAdapter(myAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void dispatchPictureTakerAction() {
-        Intent takePic = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePic.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            photoFile = createPhotoFile();
+    /***
+     * Takes in a list of listing objects and a string checks if equals sets recyclerview based
+     * on temp list
+     */
 
-            if (photoFile != null) {
-                pathToFile = photoFile.getAbsolutePath();
-                filePath = FileProvider.getUriForFile(MainActivity.this, "admin", photoFile);
-                takePic.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
-                startActivityForResult(takePic, 1);
+    public void search(String searcher, List<listingObjects> adlistings)
+    {
+        List<listingObjects> temp = new ArrayList<>();
+        if(adlistings.size()>0) {
+            int listingSize = adlistings.size();
+            for (int count = 0; count < adlistings.size(); count++) {
+                if(adlistings.get(count).getItemName().toLowerCase().contains(searcher.toLowerCase()))
+                {
+                    temp.add(adlistings.get(count));
+                }
             }
         }
+        myAdapter = new RecyclerViewAdapter(MainActivity.this, temp);
+        recyclerView.setAdapter(myAdapter);
+    }
+    //Insertion sort
+    public List<listingObjects> sort(String filter, List<listingObjects> adlistings)
+    {
+        if(adlistings.size()>0)
+        {
+            if (filter.equals("Name - Alphabetical")) {
+                int listingSize = adlistings.size();
+                for(int count = 0; count<adlistings.size();count++)
+                {
+                    for(int counter = count + 1; counter<adlistings.size();counter++)
+                    {
+                        if(adlistings.get(count).getItemName().compareToIgnoreCase(adlistings.get(counter).getItemName())>0){
+                            listingObjects temp = adlistings.get(count);
+                            adlistings.set(count, adlistings.get(counter));
+                            adlistings.set(counter, temp);
+                        }
+                    }
+                }
+            }
+            else if(filter.equals("Date - Newest to Oldest"))
+            {
+                adlistings.clear();
+                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
+                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
+                    adlistings.add(0, listing);
+                }
+            }else if(filter.equals("Date - Oldest to Newest"))
+            {
+                adlistings.clear();
+                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
+                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
+                    adlistings.add(listing);
+                }
+            }
+
+        }
+        return adlistings;
     }
 
-    private File createPhotoFile() {
-        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File image = null;
-        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            return image;
-//        }
-        image = new File(storageDir, name);
-        return image;
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void sortDialog() {
+        final String[] sortByList = getResources().getStringArray(R.array.sortByArray);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Sort by");
+        builder.setSingleChoiceItems(sortByList, filterPosition, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(i != filterPosition)
+                {
+                    listings = sort(sortByList[i], listings);
+                    filterPosition = i;
+                    dialogInterface.dismiss();
+                    myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
+                    recyclerView.setAdapter(myAdapter);
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this,"Please select a different option", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authListener);
     }
 
     public void hideKeyboard(View view) {
@@ -232,30 +277,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1) {
-            try {
-                //getting image from in-app camera
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-
-                //Setting image to ImageView
-                imgView.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if(requestCode == 2) {
-            filePath = data.getData();
-            try {
-                //getting image from local storage
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-
-                //Setting image to ImageView
-                imgView.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
         }
     }
+
 }

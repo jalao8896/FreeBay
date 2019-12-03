@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                     listingObjects listing = postSnapshot.getValue(listingObjects.class);
                     listings.add(0, listing);
                 }
-                filterPosition = 0;
+                sort("" + filterPosition,listings);
                 myAdapter = new RecyclerViewAdapter(MainActivity.this, listings);
                 recyclerView.setAdapter(myAdapter);
             }
@@ -193,7 +193,23 @@ public class MainActivity extends AppCompatActivity {
     {
         if(adlistings.size()>0)
         {
-            if (filter.equals("Name - Alphabetical")) {
+            if(filter.equals("Date - Newest to Oldest") || filter.equals("0"))
+            {
+                adlistings.clear();
+                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
+                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
+                    adlistings.add(0, listing);
+                }
+            }
+            else if(filter.equals("Date - Oldest to Newest") || filter.equals("1"))
+            {
+                adlistings.clear();
+                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
+                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
+                    adlistings.add(listing);
+                }
+            }
+            else if(filter.equals("Name - Alphabetical") || filter.equals("2")) {
                 int listingSize = adlistings.size();
                 for(int count = 0; count<adlistings.size();count++)
                 {
@@ -207,19 +223,34 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            else if(filter.equals("Date - Newest to Oldest"))
+            else if(filter.equals("Most Likes") || filter.equals("3"))
             {
-                adlistings.clear();
-                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
-                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
-                    adlistings.add(0, listing);
+                int listingSize = adlistings.size();
+                for(int count = 0; count<adlistings.size();count++)
+                {
+                    for(int counter = count + 1; counter<adlistings.size();counter++)
+                    {
+                        if(adlistings.get(count).getLikeCount()<adlistings.get(counter).getLikeCount()){
+                            listingObjects temp = adlistings.get(count);
+                            adlistings.set(count, adlistings.get(counter));
+                            adlistings.set(counter, temp);
+                        }
+                    }
                 }
-            }else if(filter.equals("Date - Oldest to Newest"))
+            }
+            else if(filter.equals("Least Likes") || filter.equals("4"))
             {
-                adlistings.clear();
-                for (DataSnapshot postSnapshot : mostRecent.getChildren()) {
-                    listingObjects listing = postSnapshot.getValue(listingObjects.class);
-                    adlistings.add(listing);
+                int listingSize = adlistings.size();
+                for(int count = 0; count<adlistings.size();count++)
+                {
+                    for(int counter = count + 1; counter<adlistings.size();counter++)
+                    {
+                        if(adlistings.get(count).getLikeCount()>adlistings.get(counter).getLikeCount()){
+                            listingObjects temp = adlistings.get(count);
+                            adlistings.set(count, adlistings.get(counter));
+                            adlistings.set(counter, temp);
+                        }
+                    }
                 }
             }
 

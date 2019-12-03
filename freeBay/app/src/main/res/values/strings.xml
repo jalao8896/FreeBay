@@ -27,6 +27,8 @@
         <item>Date - Newest to Oldest</item>
         <item>Date - Oldest to Newest</item>
         <item>Name - Alphabetical</item>
+        <item>Most Likes</item>
+        <item>Least Likes</item>
     </string-array>
 
     <string-array name="removeAccountAlert">

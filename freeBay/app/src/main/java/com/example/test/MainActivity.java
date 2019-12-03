@@ -223,15 +223,29 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            if(filter.equals("Most Likes") || filter.equals("3"))
+            else if(filter.equals("Most Likes") || filter.equals("3"))
             {
-                Toast.makeText(getApplicationContext(),"Liked",Toast.LENGTH_SHORT).show();
                 int listingSize = adlistings.size();
                 for(int count = 0; count<adlistings.size();count++)
                 {
                     for(int counter = count + 1; counter<adlistings.size();counter++)
                     {
                         if(adlistings.get(count).getLikeCount()<adlistings.get(counter).getLikeCount()){
+                            listingObjects temp = adlistings.get(count);
+                            adlistings.set(count, adlistings.get(counter));
+                            adlistings.set(counter, temp);
+                        }
+                    }
+                }
+            }
+            else if(filter.equals("Least Likes") || filter.equals("4"))
+            {
+                int listingSize = adlistings.size();
+                for(int count = 0; count<adlistings.size();count++)
+                {
+                    for(int counter = count + 1; counter<adlistings.size();counter++)
+                    {
+                        if(adlistings.get(count).getLikeCount()>adlistings.get(counter).getLikeCount()){
                             listingObjects temp = adlistings.get(count);
                             adlistings.set(count, adlistings.get(counter));
                             adlistings.set(counter, temp);

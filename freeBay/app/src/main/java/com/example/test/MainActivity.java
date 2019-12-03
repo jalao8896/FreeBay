@@ -266,16 +266,6 @@ public class MainActivity extends AppCompatActivity {
         auth.addAuthStateListener(authListener);
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    public void OpenMainActivity2(){
-        Intent intent = new Intent(this, MainActivity2.class);
-        startActivity(intent);
-    }
-
     @Override
     public void onStop() {
         super.onStop();
